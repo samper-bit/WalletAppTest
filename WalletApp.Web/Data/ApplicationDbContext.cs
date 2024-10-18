@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WalletApp.Web.Models;
 
 namespace WalletApp.Web.Data
 {
@@ -9,6 +10,17 @@ namespace WalletApp.Web.Data
             
         }
 
-        
+        public DbSet<User> Users { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Transaction>()
+                .HasOne(t => t.User)
+                .WithMany(u => u.Transactions)
+                .HasForeignKey(t => t.UserId);
+        }
     }
 }
