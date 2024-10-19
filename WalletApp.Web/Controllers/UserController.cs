@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WalletApp.Web.Data;
-using WalletApp.Web.Models;
+using WalletApp.Web.Models.Domain;
 
 namespace WalletApp.Web.Controllers
 {
@@ -41,6 +42,17 @@ namespace WalletApp.Web.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> Create(User user)
         {
+            if (user.CardBalance < 0 || user.CardBalance > 1500)
+            {
+                return BadRequest("Card balance must be between 0 and 1500");
+            }
+
+            Regex regex = new Regex("^\\d{1,3}[KMB]?$");
+            if (!regex.IsMatch(user.DailyPoints))
+            {
+                user.DailyPoints = CalculateDailyPoints();
+            }
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
@@ -53,7 +65,12 @@ namespace WalletApp.Web.Controllers
         {
             if (id != user.Id)
             {
-                return BadRequest();
+                return BadRequest("User not found!");
+            }
+
+            if (user.CardBalance < 0 || user.CardBalance > 1500)
+            {
+                return BadRequest("Card balance must be between 0 and 1500");
             }
 
             _context.Entry(user).State = EntityState.Modified;
