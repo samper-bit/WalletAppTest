@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WalletApp.Web.Models;
+using WalletApp.Web.Models.Domain;
 
 namespace WalletApp.Web.Data
 {
