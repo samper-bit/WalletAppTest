@@ -1,0 +1,58 @@
+﻿@using System.Globalization
+@using System.Runtime.InteropServices.JavaScript
+@model WalletApp.Web.Models.Domain.Transaction
+
+@{
+}
+
+<div class="container mt-5">
+    <div class="card text-center">
+        <div class="card-header">
+            @if (Model.Type == 0)
+            {
+                <h1 class="display-5 fw-bold">+$@Model.Amount </h1>
+            }
+            else
+            {
+                <h1 class="display-5 fw-bold">$@Model.Amount </h1>
+            }
+            <small class="text-muted">@Model.Title</small>
+            <div>
+                @Model.Date.ToString("MMMM d, yyyy", new CultureInfo("en-US"));
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        @if (Model.Pending == true)
+        {
+            <h5 class="card-title">Status: Pending</h5>
+        }
+        else
+        {
+            <h5 class="card-title">Status: Approved</h5>
+        }
+        <p class="card-text">@Model.Description</p>
+        @if (Model.AuthorizedUser != null)
+        {
+            <p class="card-text">From: @Model.AuthorizedUser</p>
+        }
+    </div>
+
+    <div class="card-footer">
+        @{
+            if (Model.Type == 0)
+            {
+                <div>
+                    Total: +$@Model.Amount
+                </div>
+            }
+            else
+            {
+                <div>
+                    Total: $@Model.Amount
+                </div>
+            }
+        } 
+    </div>
+</div>
+</div>

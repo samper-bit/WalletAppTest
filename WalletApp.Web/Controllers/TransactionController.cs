@@ -45,6 +45,19 @@ namespace WalletApp.Web.Controllers
             return View(viewModel);
         }
 
+        [HttpGet("transaction/{id}")]
+        public async Task<IActionResult> TransactionDetail(int id)
+        {
+            var transaction = await _context.Transactions.FirstOrDefaultAsync(t => t.Id == id);
+
+            if (transaction == null)
+            {
+                return NotFound("Transaction not found!");
+            }
+
+            return View(transaction);
+        }
+
         // GET: api/transaction
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactions(int? userId)
